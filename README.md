@@ -1,7 +1,7 @@
 # css-algorithm-python
 Demonstration of the Content Scramble System (CSS) algorithm, utlized on commercial DVDs
 
-Pre-requisite
+Dependencies
 ===
 Python 3  
 
