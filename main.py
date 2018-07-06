@@ -1,36 +1,55 @@
-#!/usr/bin/env python
-from insert_1 import insert_1
+from re import sub
+from lfsr import lfsr
 from full_adder import full_adder
-import convert
+from convert_bin import convert_bin
 
+# Initialize the plaintext
+plaintext = ("OnemansmagicisanothermansengineeringSupernaturalisanullword"
+             "OnemanstheologyisanothermansbellylaughProgressisntmadebyearly"
+             "risersItsmadebylazymentryingtofindeasierwaystodosomething")
+plaintext = sub(r'[^\w\s]', '', (''.join(plaintext.split())))  # Letters only
+plaintext_bin_arr = [bin(ord(i)).replace('b', '')
+                     for i in plaintext]  # Binary list
 
-def main():
-    # Initialize the keyword and plaintext as strings.
-    # Perform string to binary conversion for the keyword and plaintext.
-    keyword = "Shane"
-    key_bin_arr = [(bin(ord(list(keyword)[i]))).replace("b", "")
-                   for i in range(len(list(keyword)))]
-    plaintext = (
-        'OnemansmagicisanothermansengineeringSupernaturalisanullword'
-        'OnemanstheologyisanothermansbellylaughProgressisntmadebyearly'
-        'risersItsmadebylazymentryingtofindeasierwaystodosomething')
-    plaintext_bin_arr = [(bin(ord(list(plaintext)[i]))).replace("b", "")
-                         for i in range(len(list(plaintext)))]
+# Initialize keys - key must be exactly 40 bits
+keyword = "Shane"
+key = bin(int.from_bytes(keyword.encode(), "big")).replace('b', '')
+key_17 = '1' + key[:16]
+key_25 = '1' + key[16:]
 
-    # Perform the full encryption/decryption routine.
-    key_17 = insert_1(key_bin_arr[0] + key_bin_arr[1])
-    key_25 = insert_1(key_bin_arr[2] + key_bin_arr[3] + key_bin_arr[4])
-    ciphertext_bin_arr = full_adder(key_17, key_25, plaintext_bin_arr)
-    decrypt_text_bin_arr = full_adder(key_17, key_25, ciphertext_bin_arr)
+# Initialize plaintext LFSRs
+lfsr_17 = lfsr(key_17, [17, 3], plaintext_bin_arr)
+lfsr_25 = lfsr(key_25, [25, 8, 6, 2], plaintext_bin_arr)
 
-    # Print the final results.  Output is formatted to demonstrate that the
-    # binary conversion process works.
-    print("\nThe keyword: ", keyword)
-    print("The plaintext: ",
-          convert.convert_key_bin_arr(plaintext_bin_arr)[0:75])
-    print("The ciphertext: ",
-          convert.convert_enc_key(ciphertext_bin_arr)[0:75])
-    print("The decrypted ciphertext: ",
-          convert.convert_dec_key(decrypt_text_bin_arr)[0:75])
+# Encrypt
+crypt_bin = full_adder(plaintext_bin_arr, lfsr_17, lfsr_25)
 
-main()
+# Normalize
+for i in range(len(crypt_bin)):
+    crypt_bin[i] = str(crypt_bin[i])
+crypt_bin_str = "".join(crypt_bin)
+crypt_bin_arr = [
+    crypt_bin_str[start:start + 8] for start in range(0, len(crypt_bin_str), 8)
+]
+
+# Initialize ciphertext LFSRs
+lfsr_17 = lfsr(key_17, [17, 3], crypt_bin_arr)
+lfsr_25 = lfsr(key_25, [25, 8, 6, 2], crypt_bin_arr)
+
+# Decrypt
+decrypt_bin = full_adder(crypt_bin_arr, lfsr_17, lfsr_25)
+
+# Normalize
+for i in range(len(decrypt_bin)):
+    decrypt_bin[i] = str(decrypt_bin[i])
+decrypt_bin_str = "".join(decrypt_bin)
+decrypt_bin_arr = [
+    decrypt_bin_str[start:start + 8]
+    for start in range(0, len(decrypt_bin_str), 8)
+]
+
+# Print the results
+print("The keyword: ", keyword)
+print("The plaintext: ", convert_bin(plaintext_bin_arr)[0:75])
+print("The ciphertext: ", convert_bin(crypt_bin_arr))
+print("The dectext: ", convert_bin(decrypt_bin_arr)[0:75])
