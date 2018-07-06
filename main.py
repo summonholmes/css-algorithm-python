@@ -25,11 +25,9 @@ lfsr_25 = lfsr(key_25, [25, 8, 6, 2], plaintext_bin_arr)
 crypt_bin = full_adder(plaintext_bin_arr, lfsr_17, lfsr_25)
 
 # Normalize
-for i in range(len(crypt_bin)):
-    crypt_bin[i] = str(crypt_bin[i])
-crypt_bin_str = "".join(crypt_bin)
+crypt_bin_str = "".join([str(i) for i in crypt_bin])
 crypt_bin_arr = [
-    crypt_bin_str[start:start + 8] for start in range(0, len(crypt_bin_str), 8)
+    crypt_bin_str[i:i + 8] for i in range(0, len(crypt_bin_str), 8)
 ]
 
 # Initialize ciphertext LFSRs
@@ -40,12 +38,9 @@ lfsr_25 = lfsr(key_25, [25, 8, 6, 2], crypt_bin_arr)
 decrypt_bin = full_adder(crypt_bin_arr, lfsr_17, lfsr_25)
 
 # Normalize
-for i in range(len(decrypt_bin)):
-    decrypt_bin[i] = str(decrypt_bin[i])
-decrypt_bin_str = "".join(decrypt_bin)
+decrypt_bin_str = "".join([str(i) for i in decrypt_bin])
 decrypt_bin_arr = [
-    decrypt_bin_str[start:start + 8]
-    for start in range(0, len(decrypt_bin_str), 8)
+    decrypt_bin_str[i:i + 8] for i in range(0, len(decrypt_bin_str), 8)
 ]
 
 # Print the results
