@@ -1,4 +1,4 @@
-# css-algorithm-python
+# css-cryptosystem
 Demonstration of the Content Scramble System (CSS) algorithm, utlized on commercial DVDs
 
 Dependencies
