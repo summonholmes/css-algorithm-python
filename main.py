@@ -24,20 +24,11 @@ def LFSR(text_bin, key, poly, xor, lfsr):
 def FullAdder(text_bin, lfsr_17, lfsr_25, cin, crypt_bin):
     # This is the standard full-adder truth table
     for i, char in enumerate(text_bin):
-        if lfsr_17[i] + lfsr_25[i] + cin == 0:
-            s = 0
-            cout = 0
-        elif lfsr_17[i] + lfsr_25[i] + cin == 1:
-            s = 1
-            cout = 0
-        elif lfsr_17[i] + lfsr_25[i] + cin == 2:
-            s = 0
-            cout = 1
-        elif lfsr_17[i] + lfsr_25[i] + cin == 3:
-            s = 1
-            cout = 1
+        lsfr_cin_sum = lfsr_17[i] + lfsr_25[i] + cin
+        s = 0 if lsfr_cin_sum == 0 or lsfr_cin_sum == 2 else 1
+        cout = 0 if lsfr_cin_sum == 0 or lsfr_cin_sum == 1 else 1
+        crypt_bin += str((s + int(char)) % 2)
         cin = cout
-        crypt_bin.append((s + int(char)) % 2)
     return crypt_bin
 
 
@@ -60,21 +51,15 @@ lfsr_17 = LFSR(plaintext_bin, key_17, [16, 2], 0, [])
 lfsr_25 = LFSR(plaintext_bin, key_25, [24, 7, 5, 1], 0, [])
 
 ### Full Adder Plaintext
-ciphertext_bin = FullAdder(plaintext_bin, lfsr_17, lfsr_25, 0, [])
+ciphertext_bin = FullAdder(plaintext_bin, lfsr_17, lfsr_25, 0, "")
 
 ### Output Ciphertext
-ciphertext_bin = ''.join(map(str, ciphertext_bin))
 ciphertext = text_from_bits(ciphertext_bin)
 
-### LFSR 17 Ciphertext
-lfsr_17 = LFSR(ciphertext_bin, key_17, [16, 2], 0, [])
-lfsr_25 = LFSR(ciphertext_bin, key_25, [24, 7, 5, 1], 0, [])
-
 ### Full Adder Ciphertext
-dectext_bin = FullAdder(ciphertext_bin, lfsr_17, lfsr_25, 0, [])
+dectext_bin = FullAdder(ciphertext_bin, lfsr_17, lfsr_25, 0, "")
 
 ### Output Dectext
-dectext_bin = "".join(map(str, dectext_bin))
 dectext = text_from_bits(dectext_bin)
 
 ### Print the results
