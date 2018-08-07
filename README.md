@@ -5,7 +5,7 @@ The Content Scramble System (CSS) is a cryptosystem that utilizes plaintext, a k
 The only requirement for this implementation is base Python 3.
 
 ## Usage
-If necessary, edit the plaintext and keyword variables in main.py.  The key must be 5 characters.  When finished, run:
+If necessary, edit the plaintext and keyword variables in main.py.  Most characters, including punctuation, are acceptable.  The key must be exactly 30 bits or 5 characters.  When finished, run:
 ```
 $ python3 /path/to/main.py
 ```
