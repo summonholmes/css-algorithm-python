@@ -18,7 +18,6 @@ def LFSR(text_bin, key, poly, xor, lfsr):
         xor = 0 if xor % 2 == 0 else 1
         lfsr.append(xor)
         key = str(xor) + key[:-1]
-        xor = 0
     return lfsr
 
 
