@@ -7,12 +7,12 @@ The only requirement for this implementation is base Python 3.
 ## Usage
 If necessary, edit the plaintext and keyword variables in main.py.  Most characters, including punctuation, are acceptable.  The key must be exactly 30 bits or 5 characters.  When finished, run:
 ```
-$ python3 /path/to/main.py
+$ python3 /path/to/css.py
 ```
 
 ## Example
 ```
- shanekimble@Shanes-MacBook-Pro  ~  pythonconda Documents/Code/Git_summonholmes/css-cryptosystem/main.py 
+ shanekimble@Shanes-MacBook-Pro  ~  pythonconda Documents/Code/Git_summonholmes/css-cryptosystem/css.py 
 The keyword:  Shane
 The plaintext:  OnemansmagicisanothermansengineeringSupernaturalisanullwordOnemanstheologyi
 The ciphertext:  xh`/|\F/rq?O#Wۏ`-OО@*cV
